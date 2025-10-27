@@ -19,7 +19,7 @@ async def main():
     await db.connect()
     await weather_service.start()
 
-    bot = Bot(token=settings.bot_token, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    bot = Bot(token=settings.bot_token)
     dp = Dispatcher()
 
     dp.include_router(start.router)
