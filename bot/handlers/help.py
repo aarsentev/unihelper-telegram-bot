@@ -30,3 +30,11 @@ async def unknown_command(message: Message) -> None:
         f"❓ Неизвестная команда: {command}\n\n"
         f"Используйте /help для списка доступных команд."
     )
+
+
+@router.message(F.text)
+async def handle_text(message: Message) -> None:
+    await message.answer(
+        "💬 Бот работает только с командами.\n\n"
+        "Используйте /help для списка доступных команд."
+    )
