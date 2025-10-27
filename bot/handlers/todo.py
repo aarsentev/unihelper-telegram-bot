@@ -4,7 +4,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.services.db import db
 from bot.repositories.todo_repository import TodoRepository
-from bot.stats import stats
+from bot.stats.stats import stats
 
 router = Router()
 PER_PAGE = 10

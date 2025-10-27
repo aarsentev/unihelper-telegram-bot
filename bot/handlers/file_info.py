@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message
 from bot.utils.hashing import sha256_hex
-from bot.stats import stats
+from bot.stats.stats import stats
 
 router = Router()
 

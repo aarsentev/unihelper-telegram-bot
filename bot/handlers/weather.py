@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message
 from bot.services.weather import WeatherService
-from bot.stats import stats
+from bot.stats.stats import stats
 
 router = Router()
 service = WeatherService()

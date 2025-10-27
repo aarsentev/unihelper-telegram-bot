@@ -1,5 +1,5 @@
 import aiosqlite
-from bot.config import settings
+from bot.config.config import settings
 
 
 class Database:
