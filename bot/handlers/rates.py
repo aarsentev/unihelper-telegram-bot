@@ -17,7 +17,7 @@ def get_currency_emoji(currency: str) -> str:
     }
     if currency in specific:
         return specific[currency]
-    
+
     return random.choice(["💰", "💸", "💴"])
 
 
