@@ -10,17 +10,24 @@ router = Router()
 PER_PAGE = 10
 
 
-def todo_pages_keyboard(page: int, total: int, per_page: int) -> InlineKeyboardMarkup:
+def todo_pages_keyboard(page: int, total: int, per_page: int, items_on_page: int) -> InlineKeyboardMarkup:
     last_page = max(0, (total - 1) // per_page)
-    prev_page = max(0, page - 1)
-    next_page = min(last_page, page + 1)
-
+    
     kb = InlineKeyboardBuilder()
-    kb.row(
-        InlineKeyboardButton(text="⬅️", callback_data=f"todo_page:{prev_page}"),
-        InlineKeyboardButton(text=f"{page+1}/{last_page+1}", callback_data="noop"),
-        InlineKeyboardButton(text="➡️", callback_data=f"todo_page:{next_page}"),
-    )
+    buttons = []
+
+    if page > 0:
+        buttons.append(InlineKeyboardButton(text="⬅️ Назад", callback_data=f"todo_page:{page - 1}"))
+
+    start_item = page * per_page + 1
+    end_item = start_item + items_on_page - 1
+    buttons.append(InlineKeyboardButton(text=f"{start_item}-{end_item} из {total}", callback_data="noop"))
+
+    if page < last_page:
+        buttons.append(InlineKeyboardButton(text="Далее ➡️", callback_data=f"todo_page:{page + 1}"))
+    
+    if buttons:
+        kb.row(*buttons)
     return kb.as_markup()
 
 
@@ -71,8 +78,11 @@ async def send_page(message: Message, page: int) -> None:
         await message.answer("Список пуст. Добавьте: /todo add <текст>")
         return
 
-    lines = [f"{t.id}. [{'x' if t.done else ' '}] {t.text}" for t in rows]
-    await message.answer("\n".join(lines), reply_markup=todo_pages_keyboard(page, total, PER_PAGE))
+    lines = [f"{t.id}. {'✅' if t.done else '⬜'} {t.text}" for t in rows]
+    await message.answer(
+        "\n".join(lines), 
+        reply_markup=todo_pages_keyboard(page, total, PER_PAGE, len(rows))
+    )
 
 
 @router.callback_query(F.data.startswith("todo_page:"))
