@@ -22,12 +22,12 @@ async def rate(message: Message):
 
     try:
         rates = await service.get_rates(base, symbols)
-    except Exception:
-        await message.answer("Ошибка при получении курсов.")
+    except Exception as e:
+        await message.answer(f"Ошибка при получении курсов: {e}")
         return
 
     if not rates:
-        await message.answer("Пустой ответ.")
+        await message.answer(f"Курсы не найдены. Проверьте код валюты '{base}'.")
         return
 
     text = "\n".join([f"{sym}: {rates.get(sym, '—')}" for sym in symbols])
