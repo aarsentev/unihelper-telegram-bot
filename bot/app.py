@@ -23,12 +23,12 @@ async def main():
     dp = Dispatcher()
 
     dp.include_router(start.router)
-    dp.include_router(help.router)
     dp.include_router(todo.router)
     dp.include_router(weather.router)
     dp.include_router(rates.router)
     dp.include_router(file_info.router)
     dp.include_router(stats.router)
+    dp.include_router(help.router)
 
     try:
         await dp.start_polling(bot)
