@@ -18,7 +18,7 @@ class TodoRepository:
 
     async def list_page(self, user_id: int, limit: int, offset: int):
         cur = await self.conn.execute(
-            "SELECT * FROM todo WHERE user_id=? ORDER BY id DESC LIMIT ? OFFSET ?",
+            "SELECT * FROM todo WHERE user_id=? ORDER BY id ASC LIMIT ? OFFSET ?",
             (user_id, limit, offset),
         )
         rows = await cur.fetchall()

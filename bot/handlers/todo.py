@@ -85,6 +85,23 @@ async def send_page(message: Message, page: int) -> None:
     )
 
 
+async def edit_page(message: Message, user_id: int, page: int) -> None:
+    repo = TodoRepository(db.conn)
+    total = await repo.count(user_id)
+    offset = page * PER_PAGE
+    rows = await repo.list_page(user_id, PER_PAGE, offset)
+
+    if not rows:
+        await message.edit_text("Список пуст. Добавьте: /todo add <текст>")
+        return
+
+    lines = [f"{t.id}. {'✅' if t.done else '⬜'} {t.text}" for t in rows]
+    await message.edit_text(
+        "\n".join(lines), 
+        reply_markup=todo_pages_keyboard(page, total, PER_PAGE, len(rows))
+    )
+
+
 @router.callback_query(F.data.startswith("todo_page:"))
 async def todo_page_cb(cb: CallbackQuery) -> None:
     try:
@@ -93,4 +110,4 @@ async def todo_page_cb(cb: CallbackQuery) -> None:
         await cb.answer()
         return
     await cb.answer()
-    await send_page(cb.message, page)
+    await edit_page(cb.message, cb.from_user.id, page)
