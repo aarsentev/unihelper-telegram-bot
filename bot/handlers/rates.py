@@ -2,9 +2,23 @@ from aiogram import Router, F
 from aiogram.types import Message
 from bot.services.rates import RatesService
 from bot.stats.stats import stats
+import random
 
 router = Router()
 service = RatesService()
+
+
+def get_currency_emoji(currency: str) -> str:
+    specific = {
+        "USD": "💵",
+        "EUR": "💶", 
+        "GBP": "💷",
+        "CAD": "🇨🇦",
+    }
+    if currency in specific:
+        return specific[currency]
+    
+    return random.choice(["💰", "💸", "💴"])
 
 
 @router.message(F.text.startswith("/rate"))
@@ -30,5 +44,7 @@ async def rate(message: Message):
         await message.answer(f"Курсы не найдены. Проверьте код валюты '{base}'.")
         return
 
-    text = "\n".join([f"{sym}: {rates.get(sym, '—')}" for sym in symbols])
-    await message.answer(f"База: {base}\n{text}")
+    base_emoji = get_currency_emoji(base)
+    lines = [f"{get_currency_emoji(sym)} {sym}: {rates.get(sym, '—')}" for sym in symbols]
+    text = "\n".join(lines)
+    await message.answer(f"{base_emoji} База: {base}\n\n{text}")
