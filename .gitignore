@@ -212,3 +212,4 @@ __marimo__/
 # SQLite file
 todo.sqlite3
 bot/todo.sqlite3
+data/*.sqlite3
