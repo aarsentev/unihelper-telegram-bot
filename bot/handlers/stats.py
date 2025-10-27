@@ -26,12 +26,12 @@ async def cmd_stats(message: Message) -> None:
     ) or "  —"
 
     text = (
-        "Статистика бота\n"
-        f"Аптайм: {time_formatter(stats.uptime_seconds)}\n"
-        f"Уникальных пользователей: {len(stats.user_ids)}\n"
-        "Команды:\n"
-        f"{commands_text}\n"
-        f"Размер БД: {db_size_kb} КБ"
+        "📊 Статистика бота\n\n"
+        f"⏱️ Время работы: {time_formatter(stats.uptime_seconds)}\n"
+        f"👥 Уникальных пользователей: {len(stats.user_ids)}\n\n"
+        "📝 Команды:\n"
+        f"{commands_text}\n\n"
+        f"💾 Размер БД: {db_size_kb} КБ"
     )
 
     await message.answer(text)
